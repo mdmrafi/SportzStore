@@ -8,7 +8,7 @@ const AllEquipment = () => {
   const [products, setProducts] = useState([]);
   const [sortOrder, setSortOrder] = useState('default');
   useEffect(()=>{
-    fetch('http://localhost:5000/api/allequipments',{
+    fetch('https://sportzstore.onrender.com/api/allequipments',{
       method:'GET'
     }).then(res=>res.json())
     .then((data)=>{

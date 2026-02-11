@@ -32,14 +32,14 @@ const MyEquipment = () => {
      
      if (!user) return; // Don't fetch if user is not logged in
      
-     fetch(`http://localhost:5000/api/myequipment/${user.uid}`,{
+     fetch(`https://sportzstore.onrender.com/api/myequipment/${user.uid}`,{
       method:'GET'
      }).then(
       res=>res.json()
      ).then(
       (data)=>{
         setProducts(data);
-        console.log(`${data.length} user fetched sucessful`)
+        console.log(`${data.length} user fetched successful`)
       }
      ) 
   },[user])

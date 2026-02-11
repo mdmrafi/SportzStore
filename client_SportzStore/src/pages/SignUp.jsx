@@ -14,7 +14,7 @@ const SignUp = () => {
       const tempPassword = Math.random().toString(36).slice(-12);
       await createUserWithEmailAndPassword(auth, email, tempPassword)
       const user = auth.currentUser;
-      await fetch('http://localhost:5000/api/users',{
+      await fetch('https://sportzstore.onrender.com/api/users',{
         method:'POST',
         headers:{
           'Content-Type':'application/json'

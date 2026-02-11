@@ -11,7 +11,7 @@ const Login = () => {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
       // Save user to backend
-      await fetch('http://localhost:5000/api/users', {
+      await fetch('https://sportzstore.onrender.com/api/users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
