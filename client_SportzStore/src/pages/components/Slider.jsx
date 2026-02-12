@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const panels = [
   {
@@ -31,6 +31,8 @@ const panels = [
 const Slider = () => {
   const [activePanel, setActivePanel] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const containerRef = useRef(null);
 
   useEffect(() => {
     if (isPaused) return;
@@ -42,16 +44,50 @@ const Slider = () => {
     return () => clearInterval(interval);
   }, [isPaused]);
 
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 480px)");
+    const update = () => setIsMobile(media.matches);
+    update();
+    media.addEventListener("change", update);
+
+    return () => media.removeEventListener("change", update);
+  }, []);
+
+  useEffect(() => {
+    if (!isMobile || !containerRef.current) return;
+
+    const target = containerRef.current.children[activePanel];
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth", inline: "start" });
+    }
+  }, [activePanel, isMobile]);
+
   const handlePanelClick = (index) => {
     setActivePanel(index);
     setIsPaused(true);
     setTimeout(() => setIsPaused(false), 5000); // Resume after 5 seconds
   };
 
+  const handleScroll = (event) => {
+    if (!isMobile) return;
+
+    const container = event.currentTarget;
+    const panelWidth = container.clientWidth;
+    const nextIndex = Math.round(container.scrollLeft / panelWidth);
+
+    if (nextIndex !== activePanel) {
+      setActivePanel(nextIndex);
+      setIsPaused(true);
+      setTimeout(() => setIsPaused(false), 5000);
+    }
+  };
+
   return (
     <div
+      ref={containerRef}
+      onScroll={handleScroll}
       className="flex w-[90vw] max-[480px]:w-screen max-[480px]:overflow-x-auto 
-      max-[480px]:flex-nowrap max-[480px]:snap-x max-[480px]:snap-mandatory"
+      max-[480px]:flex-nowrap max-[480px]:snap-x max-[480px]:snap-mandatory max-[480px]:scroll-smooth"
     >
       {panels.map((panel, index) => (
         <div
@@ -61,8 +97,7 @@ const Slider = () => {
             text-white cursor-pointer m-2.5 relative
             transition-all duration-700 ease-[cubic-bezier(0.5,0,0.5,1)]
             ${index === activePanel ? 'flex-5' : 'flex-[0.5]'}
-            ${index >= 3 ? 'max-[480px]:hidden' : ''}
-            max-[480px]:min-w-full max-[480px]:flex-none
+            max-[480px]:min-w-full max-[480px]:flex-none max-[480px]:m-0
             max-[480px]:snap-center
           `}
           style={{ backgroundImage: `url(${panel.image})` }}
