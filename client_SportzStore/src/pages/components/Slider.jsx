@@ -49,7 +49,10 @@ const Slider = () => {
   };
 
   return (
-    <div className="flex w-[90vw] max-[480px]:w-screen">
+    <div
+      className="flex w-[90vw] max-[480px]:w-screen max-[480px]:overflow-x-auto 
+      max-[480px]:flex-nowrap max-[480px]:snap-x max-[480px]:snap-mandatory"
+    >
       {panels.map((panel, index) => (
         <div
           key={panel.id}
@@ -59,6 +62,8 @@ const Slider = () => {
             transition-all duration-700 ease-[cubic-bezier(0.5,0,0.5,1)]
             ${index === activePanel ? 'flex-5' : 'flex-[0.5]'}
             ${index >= 3 ? 'max-[480px]:hidden' : ''}
+            max-[480px]:min-w-full max-[480px]:flex-none
+            max-[480px]:snap-center
           `}
           style={{ backgroundImage: `url(${panel.image})` }}
           onClick={() => handlePanelClick(index)}
@@ -68,6 +73,7 @@ const Slider = () => {
               text-2xl absolute bottom-5 left-5 m-0
               transition-opacity duration-300 ease-in delay-400
               ${index === activePanel ? 'opacity-100' : 'opacity-0'}
+              max-[480px]:opacity-100
             `}
           >
             {panel.title}
